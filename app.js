@@ -31,7 +31,9 @@ app.use(session({
     secret:setting.cookieSecret,
     store:new MongoStore({
         db:setting.db
-    })
+    }),
+    resave:false,
+    saveUninitialized:false
 }));
 
 app.listen(port);

@@ -30,14 +30,14 @@ User.prototype.insert = function insert(callback){
 			}
 			collection.findOne({username:_user.username},function(err,doc){
 				if(doc){
+					DB.close();
 					callback(err,{
 						message:'user is already exists.'
 					});
-					DB.close();
 				}else{
 					collection.insert(_user,function(err,doc){
-						callback(err,doc[0]);
 						DB.close();
+						callback(err,doc[0]);
 					});
 				}
 			});
