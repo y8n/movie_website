@@ -5,7 +5,7 @@
   "scripts": {
     "start": "node ./bin/www"
   },
-  "description":"经过重构之后到网站，不包括grunt，相比于上一例，将路由进行了分离和对数据库集合定制模型",
+  "description":"添加用户登陆和注册管理，用户展示列表/user/list,添加session管理",
   "dependencies": {
     "express": "~4.10.6",
     "body-parser": "~1.10.1",
@@ -14,6 +14,8 @@
     "serve-favicon": "~2.2.0",
     "debug": "~2.1.1",
     "jade": "~1.8.2",
-    "mongodb":"1.4.20"
+    "mongodb":"~1.4.20",
+    "express-session":"~1.10.2",
+    "connect-mongo":"~0.4.1"
   }
 }

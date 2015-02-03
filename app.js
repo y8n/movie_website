@@ -3,7 +3,10 @@ var express = require('express'),
     favicon = require('serve-favicon'),
     logger = require('morgan'),
     cookieParser = require('cookie-parser'),
-    bodyParser = require('body-parser');
+    bodyParser = require('body-parser'),
+    session = require('express-session'),
+    MongoStore = require('connect-mongo')(session),
+    setting = require('./setting');
 
 // 路由配置
 var movie = require('./routes/movie');
@@ -23,6 +26,14 @@ app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname,'public')))
+//配置session
+app.use(session({
+    secret:setting.cookieSecret,
+    store:new MongoStore({
+        db:setting.db
+    })
+}));
+
 app.listen(port);
 console.log('Server listen on '+port);
 

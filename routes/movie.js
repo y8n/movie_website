@@ -4,6 +4,7 @@ var router = express.Router();
 
 // index page
 router.get('/', function(req, res) {
+    console.log(req.session.user)
     Movie.findAll(function(err,doc){
     	if(err){
     		console.error(err);
