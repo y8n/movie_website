@@ -1,24 +1,5 @@
-var express = require('express');
 var Movie = require('../models/movie');
-var router = express.Router();
-
-// index page
-router.get('/', function(req, res) {
-    console.log(req.session.user)
-    Movie.findAll(function(err,doc){
-    	if(err){
-    		console.error(err);
-    		return;
-    	}
-    	res.render('index',{
-            title:'首页-Welcome to My Website',
-            movies:doc
-        });
-    })
-});
-
-// detail page
-router.get('/movie/:id',function(req,res){
+exports.detail = function(req,res){
     var id = req.params.id;
     if(id){
         Movie.findById(id,function(err,doc){
@@ -32,10 +13,9 @@ router.get('/movie/:id',function(req,res){
             })
         })
     }
-});
+}
 
-// admin page
-router.get('/admin/movie',function(req,res){
+exports.new = function(req,res){
     res.render('admin',{
         title:'后台录入页面',
         movie:{
@@ -50,10 +30,8 @@ router.get('/admin/movie',function(req,res){
         }
 
     });
-});
-
-// admin update
-router.get('/admin/update/:id',function(req,res){
+}
+exports.update = function(req,res){
     var id = req.params.id;
     if(id){
     	Movie.findById(id,function(err,doc){
@@ -67,10 +45,8 @@ router.get('/admin/update/:id',function(req,res){
             })
         })
     }
-});
-
-// admin post movie
-router.post('/admin/movie/new',function(req,res){
+}
+exports.save = function(req,res){
     var movieObj = req.body;
     var id = movieObj._id;
     var _movie = {};
@@ -111,10 +87,8 @@ router.post('/admin/movie/new',function(req,res){
             res.redirect('/movie/'+movie._id);
         });    
     }
-});
-
-// list page
-router.get('/admin/list',function(req,res){
+}
+exports.list = function(req,res){
     Movie.findAll(function(err,doc){
         if(err){
             console.error(err);
@@ -125,10 +99,8 @@ router.get('/admin/list',function(req,res){
             movies:doc
         });
     })
-});
-
-// list delete movie
-router.post('/admin/list',function(req,res){
+}
+exports.del = function(req,res){
     var id = req.query.id;
     if(id){
         Movie.deleteById(id,function(err,doc){
@@ -145,12 +117,7 @@ router.post('/admin/list',function(req,res){
             }
         });
     }
-})
-module.exports = router;
-
-
-
-
+}
 
 
 
