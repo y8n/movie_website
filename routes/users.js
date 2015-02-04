@@ -43,7 +43,7 @@ router.post('/user/signin',function(req,res){
 		}
 		if(isMatch){
 			console.log('Signin success');
-			req.session.user = _user;
+			req.session.user= _user;
 			res.redirect('/user/list');
 		}else{
 			console.log('failed')
@@ -51,5 +51,13 @@ router.post('/user/signin',function(req,res){
 		}
 	})
 });
+// 用户登出
+router.get('/logout',function(req,res){
+	delete req.session.user;
+	res.redirect('/');
+});
+
+
+
 
 module.exports = router;

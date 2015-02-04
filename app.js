@@ -5,20 +5,22 @@ var express = require('express'),
     cookieParser = require('cookie-parser'),
     bodyParser = require('body-parser'),
     session = require('express-session'),
+    mongodb = require('mongodb'),
     MongoStore = require('connect-mongo')(session),
     setting = require('./setting');
 
 // 路由配置
+var index = require('./routes/index');
 var movie = require('./routes/movie');
 var users = require('./routes/users');
 
-var routes = [movie,users];
+var routes = [index,movie,users];
 
 var port = process.env.PORT || 3000;
 var app = express();
 
 // uncomment after placing your favicon in /public
-//app.use(favicon(__dirname + '/public/favicon.ico'));
+// app.use(favicon(__dirname + '/public/favicon.ico'));
 app.set('views','./views/pages');
 app.set('view engine','jade');
 app.use(bodyParser.json());
@@ -26,6 +28,7 @@ app.use(logger('dev'));
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname,'public')))
+app.locals.pretty = true //后台代码格式化输出
 //配置session
 app.use(session({
     secret:setting.cookieSecret,
@@ -38,6 +41,30 @@ app.use(session({
 
 app.listen(port);
 console.log('Server listen on '+port);
+
+var Db = mongodb.Db,
+    Connection = mongodb.Connection,
+    Server = mongodb.Server;
+
+var host = "localhost",port = Connection.DEFAULT_PORT;
+var db = new Db("mywebsite",new Server(host,port,{auto_reconnect:true,poolSize:20}),{w:1});
+
+db.open(function(err,client){
+    if(err){
+        console.error(err);
+        return;
+    }
+    console.log('connect mongodb success');
+    db.close();
+});
+
+app.use(function(req,res,next){
+    var user = req.session.user;
+    if(user){
+        res.locals.user = user;
+    }
+    next();
+})
 
 app.use(routes);
 

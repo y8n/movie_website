@@ -2,22 +2,8 @@ var express = require('express');
 var Movie = require('../models/movie');
 var router = express.Router();
 
-// index page
-router.get('/', function(req, res) {
-    console.log(req.session.user)
-    Movie.findAll(function(err,doc){
-    	if(err){
-    		console.error(err);
-    		return;
-    	}
-    	res.render('index',{
-            title:'首页-Welcome to My Website',
-            movies:doc
-        });
-    })
-});
 
-// detail page
+// movie detail page
 router.get('/movie/:id',function(req,res){
     var id = req.params.id;
     if(id){
@@ -146,6 +132,9 @@ router.post('/admin/list',function(req,res){
         });
     }
 })
+
+
+
 module.exports = router;
 
 
