@@ -1,5 +1,6 @@
 var express = require('express');
 var Movie = require('../models/movie');
+var Comment = require('../models/comment');
 var router = express.Router();
 
 
@@ -7,21 +8,25 @@ var router = express.Router();
 router.get('/movie/:id',function(req,res){
     var id = req.params.id;
     if(id){
-        Movie.findById(id,function(err,doc){
+        Movie.findById(id,function(err,movie){
         	if(err){
         		console.error(err);
         		return;
         	}
-        	res.render('detail',{
-                title:'电影详细信息',
-                movie:doc
+            Comment.findAllByMoiveId(id,function(err,comments){
+                res.render('detail',{
+                    title:'电影详细信息',
+                    movie:movie,
+                    comments:comments
+                })
             })
-        })
+        });
+
     }
 });
 
 // admin page
-router.get('/admin/movie',function(req,res){
+router.get('/admin/movie',signinRequired,adminRequired,function(req,res){
     res.render('admin',{
         title:'后台录入页面',
         movie:{
@@ -39,7 +44,7 @@ router.get('/admin/movie',function(req,res){
 });
 
 // admin update
-router.get('/admin/update/:id',function(req,res){
+router.get('/admin/update/:id',signinRequired,adminRequired,function(req,res){
     var id = req.params.id;
     if(id){
     	Movie.findById(id,function(err,doc){
@@ -56,7 +61,7 @@ router.get('/admin/update/:id',function(req,res){
 });
 
 // admin post movie
-router.post('/admin/movie/new',function(req,res){
+router.post('/admin/movie/new',signinRequired,adminRequired,function(req,res){
     var movieObj = req.body;
     var id = movieObj._id;
     var _movie = {};
@@ -100,7 +105,7 @@ router.post('/admin/movie/new',function(req,res){
 });
 
 // list page
-router.get('/admin/list',function(req,res){
+router.get('/admin/list',signinRequired,adminRequired,function(req,res){
     Movie.findAll(function(err,doc){
         if(err){
             console.error(err);
@@ -114,7 +119,7 @@ router.get('/admin/list',function(req,res){
 });
 
 // list delete movie
-router.post('/admin/list',function(req,res){
+router.post('/admin/list',signinRequired,adminRequired,function(req,res){
     var id = req.query.id;
     if(id){
         Movie.deleteById(id,function(err,doc){
@@ -132,7 +137,22 @@ router.post('/admin/list',function(req,res){
         });
     }
 })
-
+//需要用户登录
+function signinRequired(req,res,next){
+    var user = req.session.user;
+    if(!user){
+        return res.redirect('/signin');
+    }
+    next();
+} 
+// 需要管理员权限
+function adminRequired(req,res,next){
+    var user = req.session.user;
+    if(!user.role || user.role <= 10){
+        return res.redirect('/signin');
+    }
+    next();
+}
 
 
 module.exports = router;

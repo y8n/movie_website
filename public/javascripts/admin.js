@@ -14,10 +14,31 @@ $(function() {
 				.done(function(results){
 					if(results.success){
 						tr.remove();
+						alert("删除成功");
+					}else{
+						alert("删除失败");
 					}
-					alert(results.msg);
 				})
 			}
 		}
-	})
+	});
+	$('#signinForm :button').eq(1).click(function(e){
+		$.ajax({
+			type:"post",
+			url:'/user/signin',
+			data:$('#signinForm').serialize(),
+			success:function(data){
+				if(data.success){
+					$('#signinForm .alert').show().addClass('alert-success');
+					$('#signinForm .alert .content').text(data.msg);
+				}else{
+					$('#signinForm .alert .content').text(data.msg);
+					$('#signinForm .alert').show().addClass('alert-danger').fadeOut(3000).remove();
+				}
+			}
+		})
+	});
+
+
+
 })

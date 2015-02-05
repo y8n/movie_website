@@ -37,8 +37,8 @@ Movie.prototype.insert = function insert(callback){
 				return callback(err);
 			}
 			collection.insert(_movie,function(err,doc){
-				callback(err,doc[0]);
 				DB.close();
+				callback(err,doc[0]);
 			});
 		});
 	});
@@ -56,12 +56,12 @@ Movie.findById = function findById(id,callback){
 				return callback(err);
 			}
 			collection.findOne({_id:mongodb.ObjectID(id)},function(err,doc){
+				DB.close();
 				if(doc){
 					callback(err,doc);
 				}else{
 					callback(err,null);
 				}
-				DB.close();
 			});
 		});
 	});
@@ -78,12 +78,12 @@ Movie.findAll = function findAll(callback){
 				return callback(err);
 			}
 			collection.find({}).toArray(function(err,doc){
+				DB.close();
 				if(doc){
 					callback(err,doc);
 				}else{
 					callback(err,null);
 				}
-				DB.close();
 			});
 		});
 	});
@@ -110,12 +110,12 @@ Movie.prototype.update = function update(id,callback){
 				return callback(err);
 			}
 			collection.update({_id:mongodb.ObjectID(id)},{$set:_movie},function(err,doc){
+				DB.close();
 				if(doc){
 					callback(err,doc);
 				}else{
 					callback(err,null);
 				}
-				DB.close();
 			});
 		});
 	});
@@ -132,12 +132,12 @@ Movie.deleteById = function deleteById(id,callback){
 				return callback(err);
 			}
 			collection.remove({_id:mongodb.ObjectID(id)},function(err,doc){
+				DB.close();
 				if(doc){
 					callback(err,doc);
 				}else{
 					callback(err,null);
 				}
-				DB.close();
 			});
 		});
 	});

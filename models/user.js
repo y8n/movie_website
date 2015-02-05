@@ -5,6 +5,9 @@ var DB = require('./db'),
 function User (user) {
 	this.username = user.username;
 	this.password = user.password;
+	// 0:normal_user,1:verified user,2:professonal user
+	// >10 admin ,>50 super admin
+	this.role = user.role || 0; 
 }
 
 module.exports = User;
@@ -85,9 +88,9 @@ User.prototype.comparePassword = function comparePassword(callback){
 			return;
 		}
 		if(user && user.password === _user.password){
-			callback(err,true);
+			callback(err,true,user);
 		}else{
-			callback(err,false);
+			callback(err,false,null);
 		}
 	});
 }

@@ -7,6 +7,26 @@ block content
         h1= title
       .col-md-7
         embed(src="#{movie.flash}",allowFullScreen="true",quality="high",width="720",height="600",align="middle",type="application/x-shockware-flash")
+        .panel.panel-default
+          .panel-heading
+            h3 评论区
+          .panel-body
+            ul.media-list
+              each comment in comments         
+                li.media
+                  .pull-left
+                    img.media-object(src="data:shenmewanyi",style="width:64px,height64px")
+                  .media-body
+                    h4.media-heading #{comment.from}
+                    p #{comment.content}
+                  hr
+          form(method="post",action="/admin/comment")
+            input(type="hidden",value="#{movie._id}",name="movieId")
+            if user
+              input(type="hidden",value="#{user._id}",name="from")
+            .form-group
+              textarea.form-control(row="3",name="content",placeholder="评论一下吧")
+            button.btn.btn-primary(type="submit") 评论
       .col-md-5
         .dl-horizontal
           dt 电影名字
@@ -21,3 +41,5 @@ block content
           dd= movie.year 
           dt 简介
           dd= movie.summary 
+
+
