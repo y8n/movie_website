@@ -5,8 +5,8 @@ block content
     .row
       .page-header
         h1= title
-      .col-md-7
-        embed(src="#{movie.flash}",allowFullScreen="true",quality="high",width="720",height="600",align="middle",type="application/x-shockware-flash")
+      .col-md-8
+        embed(src="#{movie.flash}",allowFullScreen="true",quality="high",width="750",height="600",align="middle",type="application/x-shockware-flash")
         .panel.panel-default
           .panel-heading
             h3 评论区
@@ -15,19 +15,36 @@ block content
               each comment in comments         
                 li.media
                   .pull-left
-                    img.media-object(src="data:shenmewanyi",style="width:64px,height64px")
+                    a.comment(href="#comments",data-cid="#{comment._id}",data-tid="#{comment.from._id}")
+                      img(src="#{comment.from.avatar}",style="width:55px;height:55px",alt="#{comment.from.username}")
                   .media-body
-                    h4.media-heading #{comment.from}
+                    h4.media-heading #{comment.from.username}
                     p #{comment.content}
+                    if comment.reply && comment.reply.length > 0
+                      each reply in comment.reply
+                        .media
+                          .pull-left
+                            a.comment(href="#comments",data-cid="#{comment._id}",data-tid="#{reply.from._id}")
+                              img(src="#{reply.from.avatar}",style="width:50px;height:50px",alt="#{reply.from.username}")   
+                          .media-body
+                            h4.media-heading 
+                              |#{reply.from.username}
+                              span.text-info &nbsp;回复&nbsp;
+                              | #{reply.to.username}:
+                            p  #{reply.content}
                   hr
-          form(method="post",action="/admin/comment")
-            input(type="hidden",value="#{movie._id}",name="movieId")
-            if user
-              input(type="hidden",value="#{user._id}",name="from")
-            .form-group
-              textarea.form-control(row="3",name="content",placeholder="评论一下吧")
-            button.btn.btn-primary(type="submit") 评论
-      .col-md-5
+          #comments
+            form#commentForm(method="post",action="/admin/comment")
+              input(type="hidden",value="#{movie._id}",name="movieId")
+              if user
+                input(type="hidden",value="#{user._id}",name="from")
+              .form-group
+                textarea.form-control(row="3",name="content",placeholder="评论一下吧")
+              if user  
+                button.btn.btn-primary(type="submit") 评论
+              else
+                a.btn.btn-warning(href="javascript:void(0)",data-toggle="modal",data-target="#signinModal") 登录后评论
+      .col-md-4.col-md-pull-1
         .dl-horizontal
           dt 电影名字
           dd= movie.title
@@ -40,6 +57,22 @@ block content
           dt 上映年份
           dd= movie.year 
           dt 简介
-          dd= movie.summary 
+          dd= movie.summary
+  #signinModal.modal.fade
+    .modal-dialog
+      .modal-content
+        form(method="post",action="/user/signin")
+          .modal-header  登录
+          .modal-body
+            .form-group
+              label(for="signinName") 用户名 
+              input#signinName.form-control(name="username",type="text")
+            .form-group
+              label(for="signinPassword") 密码
+              input#signinPassword.form-control(name="password",type="password")
+          .modal-footer
+            button.btn(type="button",data-dismiss="modal") 关闭
+            button.btn.btn-primary(type="submit") 登录
+  script(src="/javascripts/detail.js",type="text/javascript")
 
 

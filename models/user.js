@@ -7,7 +7,8 @@ function User (user) {
 	this.password = user.password;
 	// 0:normal_user,1:verified user,2:professonal user
 	// >10 admin ,>50 super admin
-	this.role = user.role || 0; 
+	this.role = user.role || 0;
+	this.avatar = "http://localhost:3000/images/avatar-default.svg"; 
 }
 
 module.exports = User;
@@ -19,8 +20,9 @@ User.prototype.insert = function insert(callback){
 	//存入mongodb中到文档
 	var _user = {
 		username:this.username,
+		avatar:this.avatar,
 		password:password
-	}
+	}	
 
 	DB.open(function(err,db){
 		if(err){
@@ -80,6 +82,7 @@ User.prototype.comparePassword = function comparePassword(callback){
 
 	var _user = {
 		username:this.username,
+		avatar:this.avatar,
 		password:password
 	}
 	User.findByName(_user.username,function(err,user){

@@ -5,7 +5,7 @@ var DB = require('./db'),
 function Comment(comment){
 	this.from = comment.from;
 	this.movieId = comment.movieId;
-	this.to = comment.to;
+	this.reply = [];
 	this.content = comment.content;
 }
 
@@ -16,7 +16,7 @@ Comment.prototype.save = function save (callback){
 	var _comment = {
 		from : mongodb.ObjectID(this.from),
 		movieId : mongodb.ObjectID(this.movieId),
-		to : this.to?mongodb.ObjectID(this.to):null,
+		reply : this.reply,
 		content : this.content
 	}
 
@@ -36,6 +36,7 @@ Comment.prototype.save = function save (callback){
 		});
 	});
 }
+
 Comment.findAllByMoiveId = function findAllByMoiveId(id,callback){
 	DB.open(function(err,db){
 		if(err){
@@ -47,10 +48,9 @@ Comment.findAllByMoiveId = function findAllByMoiveId(id,callback){
 				return callback(err);
 			}
 			collection.find({movieId:mongodb.ObjectID(id)}).toArray(function(err,comments){
-				
 				if(comments){
 					var _comments = [];
-					(function iterator(i){
+					;(function iterator(i){
 						if(i == comments.length){
 							DB.close();
 							callback(err,_comments);
@@ -61,14 +61,30 @@ Comment.findAllByMoiveId = function findAllByMoiveId(id,callback){
 							_id:comment._id,
 							content:comment.content
 						}
+						var _reply = [];
 						db.collection('users',function(err,collection){
 							collection.findOne({_id:mongodb.ObjectID(comment.from)},function(err,from){
-								_comment.from = from.username;
-								collection.findOne({_id:mongodb.ObjectID(comment.to)},function(err,to){
-									_comment.to = to?to.username:null;
-									_comments.push(_comment);
-									iterator(++i);
-								})
+								_comment.from = from;
+								;(function iterator2(j){
+									if(j == comment.reply.length){
+										_comment.reply = _reply;
+										_comments.push(_comment);
+										iterator(++i);
+									}else{
+										var __reply = {
+											content:comment.reply[j].content
+										};
+										collection.findOne({_id:mongodb.ObjectID(comment.reply[j].from)},function(err,from){
+											__reply.from = from;
+											collection.findOne({_id:mongodb.ObjectID(comment.reply[j].to)},function(err,to){
+												//console.log(to)
+												__reply.to = to;
+												_reply.push(__reply);
+												iterator2(++j);
+											})
+										})
+									}
+								})(0)
 							})
 						})
 					})(0);
@@ -80,8 +96,40 @@ Comment.findAllByMoiveId = function findAllByMoiveId(id,callback){
 		});
 	});
 }
-
-
+Comment.findById = function findById(id,callback){
+	DB.open(function(err,db){
+		if(err){
+			return callback(err);
+		}
+		db.collection('comments',function(err,collection){
+			if(err){
+				DB.close();
+				return callback(err);
+			}
+			collection.findOne({_id:mongodb.ObjectID(id)},function(err,comment){
+				DB.close();
+				callback(err,comment);
+			})
+		});
+	});
+}
+Comment.addReply = function addReply(id,reply,callback){
+	DB.open(function(err,db){
+		if(err){
+			return callback(err);
+		}
+		db.collection('comments',function(err,collection){
+			if(err){
+				DB.close();
+				return callback(err);
+			}
+			collection.update({_id:mongodb.ObjectID(id)},{$set:{reply:reply}},function(err,comment){
+				DB.close();
+				callback(err,comment);
+			})
+		});
+	});
+}
 
 
 

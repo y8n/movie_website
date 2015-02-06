@@ -14,6 +14,8 @@ router.get('/movie/:id',function(req,res){
         		return;
         	}
             Comment.findAllByMoiveId(id,function(err,comments){
+                //console.log('comments')
+                //console.log(comments)
                 res.render('detail',{
                     title:'电影详细信息',
                     movie:movie,

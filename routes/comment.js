@@ -3,16 +3,42 @@ var Comment = require('../models/comment');
 var router = express.Router();
 
 router.post('/admin/comment',signinRequired,function(req,res){
-	var _comment = new Comment(req.body);
-	_comment.save(function(err,comment){
-		if(err){
-			console.log(err);
-			return;
+	var _comment = req.body;
+	var movieId = _comment.movieId;
+	if(_comment.cid){
+		var reply = {
+			from:_comment.from,
+			to:_comment.tid,
+			content:_comment.content
 		}
-		console.log("Comment insert success");
-		res.redirect('/movie/'+_comment.movieId);
-	});
-
+		Comment.findById(_comment.cid,function(err,comment){
+			if(err){
+				console.error(err);
+				return;
+			}
+			var _reply = comment.reply;
+			_reply.push(reply);
+			Comment.addReply(_comment.cid,_reply,function(err,comment){
+				if(err){
+					console.log(err);
+					return;
+				}
+				console.log(comment)
+				console.log("Reply insert success");
+				res.redirect('/movie/'+_comment.movieId);
+			});
+		})
+	}else{
+		_comment = new Comment(req.body)
+		_comment.save(function(err,comment){
+			if(err){
+				console.log(err);
+				return;
+			}
+			console.log("Comment insert success");
+			res.redirect('/movie/'+_comment.movieId);
+		});
+	}
 })
 
 function signinRequired(req,res,next){
