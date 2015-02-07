@@ -24,6 +24,22 @@ block content
           .col-sm-10
             input#inputLanguage.form-control(type="text",name="language",value="#{movie.language}")
         .form-group
+          label.col-sm-2.control-label(for="selectCatetory") 类型
+          .col-sm-10
+            input.form-control(type="hidden",name="oldCatetory",value="#{movie.catetory}")
+            select#selectCatetory.form-control(name="catetory")
+              if movie.catetory
+                each cat in catetories
+                  if cat.name == movie.catetory
+                    option(selected="seclected") #{cat.name}
+                  else
+                    option #{cat.name}
+              else
+                option 
+                each cat in catetories
+                  option #{cat.name}
+              option  其他
+        .form-group
           label.col-sm-2.control-label(for="inputPoster") 海报地址
           .col-sm-10
             input#inputPoster.form-control(type="text",name="poster",value="#{movie.poster}")

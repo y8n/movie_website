@@ -1,4 +1,5 @@
 var DB = require('./db'),
+	Catetory = require('./catetory'),
 	mongodb = require('mongodb');
 function Movie (movie) {
 	this.title = movie.title;
@@ -9,6 +10,7 @@ function Movie (movie) {
     this.flash = movie.flash;
     this.summary = movie.summary;
     this.language = movie.language;
+    this.catetory = movie.catetory;
 }
 
 module.exports = Movie;
@@ -25,6 +27,7 @@ Movie.prototype.insert = function insert(callback){
 	    flash : this.flash,
 	    summary : this.summary,
 	    language : this.language,
+	    catetory : this.catetory
 	}
 
 	DB.open(function(err,db){
@@ -99,6 +102,7 @@ Movie.prototype.update = function update(id,callback){
 	    flash : this.flash,
 	    summary : this.summary,
 	    language : this.language,
+	    catetory : this.catetory
 	}
 	DB.open(function(err,db){
 		if(err){
@@ -112,7 +116,8 @@ Movie.prototype.update = function update(id,callback){
 			collection.update({_id:mongodb.ObjectID(id)},{$set:_movie},function(err,doc){
 				DB.close();
 				if(doc){
-					callback(err,doc);
+					_movie._id = mongodb.ObjectID(id);
+					callback(err,_movie);
 				}else{
 					callback(err,null);
 				}

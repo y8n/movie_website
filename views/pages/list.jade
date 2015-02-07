@@ -12,7 +12,7 @@ block content
             th 导演
             th 国家
             th 上映时间
-            //- th 录入时间
+            th 电影类型
             th 查看
             th 更新
             th 删除
@@ -23,7 +23,7 @@ block content
               td #{item.doctor}
               td #{item.country}
               td #{item.year}
-              //- td #{moment(item.meta.createdAt).format('MM/DD/YYYY')}
+              td #{item.catetory}
               td: a(target="_blank",href="../movie/#{item._id}") 查看
               td: a(target="_blank",href="../admin/update/#{item._id}") 修改
               td

@@ -1,6 +1,7 @@
 var express = require('express');
 var Movie = require('../models/movie');
 var Comment = require('../models/comment');
+var Catetory = require('../models/catetory');
 var router = express.Router();
 
 
@@ -29,35 +30,42 @@ router.get('/movie/:id',function(req,res){
 
 // admin page
 router.get('/admin/movie',signinRequired,adminRequired,function(req,res){
-    res.render('admin',{
-        title:'后台录入页面',
-        movie:{
-            title:'',
-            doctor:'',
-            country:'',
-            year:'',
-            poster:'',
-            flash:'',
-            summary:'',
-            language:''
-        }
-
-    });
+    Catetory.findAllCatetory(function(err,catetories){
+        res.render('admin',{
+            title:'后台录入页面',
+            movie:{
+                title:'',
+                doctor:'',
+                country:'',
+                year:'',
+                poster:'',
+                flash:'',
+                summary:'',
+                language:''
+            },
+            catetories:catetories
+        });
+    })
+    
 });
 
 // admin update
 router.get('/admin/update/:id',signinRequired,adminRequired,function(req,res){
     var id = req.params.id;
     if(id){
-    	Movie.findById(id,function(err,doc){
+    	Movie.findById(id,function(err,movie){
         	if(err){
         		console.error(err);
         		return;
         	}
-        	res.render('admin',{
-                title:'后台更新电影',
-                movie:doc
+            Catetory.findAllCatetory(function(err,catetories){
+                res.render('admin',{
+                    title:'后台更新电影',
+                    movie:movie,
+                    catetories:catetories
+                })
             })
+        	
         })
     }
 });
@@ -74,14 +82,23 @@ router.post('/admin/movie/new',signinRequired,adminRequired,function(req,res){
                 _movie[i] = movieObj[i];
             }
         }
+        var oldCatetory = req.body.oldCatetory;
         var updateMovie = new Movie(_movie);
-        updateMovie.update(id,function(err,doc){
+        updateMovie.update(id,function(err,movie){
             if(err){
                 console.error(err);
                 return;
             }
-            console.log("Update success");
-            res.redirect("/movie/"+id);
+            Catetory.removeMovie(oldCatetory,id,function(err,catetory){
+                if(err){
+                    console.error(err);
+                    return;
+                }
+                Catetory.save(movie,function(err,catetory){
+                    console.log("Update success");
+                    res.redirect("/movie/"+id);
+                })
+            })
         });
     }else{
         _movie = {
@@ -89,6 +106,7 @@ router.post('/admin/movie/new',signinRequired,adminRequired,function(req,res){
             title:movieObj.title,
             country:movieObj.country,
             language:movieObj.language,
+            catetory:movieObj.catetory,
             year:movieObj.year,
             poster:movieObj.poster,
             summary:movieObj.summary,
@@ -100,8 +118,10 @@ router.post('/admin/movie/new',signinRequired,adminRequired,function(req,res){
                 console.error(err);
                 return;
             }
-            console.log("Insert success.New data's id is "+movie._id);
-            res.redirect('/movie/'+movie._id);
+            Catetory.save(movie,function(err,catetory){
+                console.log("Insert success.New data's id is "+movie._id);
+                res.redirect('/movie/'+movie._id);
+            })
         });    
     }
 });

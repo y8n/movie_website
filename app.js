@@ -12,10 +12,11 @@ var express = require('express'),
 // 路由配置
 var index = require('./routes/index');
 var movie = require('./routes/movie');
-var users = require('./routes/users');
+var user = require('./routes/user');
 var comment = require('./routes/comment');
+var catetory = require('./routes/catetory');
 
-var routes = [index,movie,users,comment];
+var routes = [index,movie,user,comment,catetory];
 
 var port = process.env.PORT || 3000;
 var app = express();
@@ -40,15 +41,15 @@ app.use(session({
     saveUninitialized:false
 }));
 
-app.listen(port);
-console.log('Server listen on '+port);
+//app.listen(port);
+//console.log('Server listen on '+port);
 
 var Db = mongodb.Db,
     Connection = mongodb.Connection,
     Server = mongodb.Server;
 
-var host = "localhost",port = Connection.DEFAULT_PORT;
-var db = new Db("mywebsite",new Server(host,port,{auto_reconnect:true,poolSize:20}),{w:1});
+var host = "localhost";
+var db = new Db("mywebsite",new Server(host,Connection.DEFAULT_PORT,{auto_reconnect:true,poolSize:20}),{w:1});
 
 db.open(function(err,client){
     if(err){
@@ -56,6 +57,8 @@ db.open(function(err,client){
         return;
     }
     console.log('connect mongodb success');
+    app.listen(port);
+    console.log('Server listen on '+port);
     db.close();
 });
 

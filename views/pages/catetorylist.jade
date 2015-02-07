@@ -1,0 +1,22 @@
+extends ../layout
+
+block content
+  .container
+    .row
+      .page-header
+        h1= title
+      table.table.table-hover.table-bordered
+        thead
+          tr
+            th 类型
+            th 查看
+            th 更新
+            th 删除
+        tbody
+          each cat in catetories
+            tr(class="cat-id-#{cat._id}")
+              td #{cat.name}
+              td: a(target="_blank",href="javascript:void(0)") 查看
+              td: a(target="_blank",href="../user/update/#{cat._id}") 修改
+              td
+                button.btn.btn-danger.del(type="button",data-id="#{cat._id}") 删除

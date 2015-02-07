@@ -1,0 +1,15 @@
+extends ../layout
+
+block content
+  .container
+    .row
+      .page-header
+        h1= title
+      form.form-horizontal(method="post",action="/admin/catetory/new")
+        .form-group
+          label.col-sm-2.control-label(for="inputType") 电影类型
+          .col-sm-10
+            input#inputType.form-control(type="text",name="catetory")
+        .form-group
+          .col-sm-offset-2.col-sm-10
+          button.btn.btn-default(type="submit") 录入

@@ -1,19 +1,20 @@
 var express = require('express');
 var Movie = require('../models/movie');
+var Catetory = require('../models/catetory');
 var router = express.Router();
 
 // index page
 router.get('/', function(req, res) {
-    Movie.findAll(function(err,doc){
-    	if(err){
-    		console.error(err);
-    		return;
-    	}
-    	res.render('index',{
+    Catetory.findAll(function(err,catetories){
+        if(err){
+            console.error(err);
+            return;
+        }
+        res.render('index',{
             title:'首页-Welcome to My Website',
-            movies:doc
+            catetories:catetories
         });
-    })
+    });
 });
 
 module.exports = router;
