@@ -8,6 +8,11 @@ block content
       form.form-horizontal(method="post",action="/admin/movie/new")
         input(type="hidden",name="_id",value="#{movie._id}")
         .form-group
+          label.col-sm-2.control-label(for="douban") 豆瓣同步
+          .col-sm-3
+            input#douban.form-control(type="text",name="douban",placeholder="请输入豆瓣电影ID")
+          button#getDouban.btn.btn-primary(type="button") 同步数据
+        .form-group
           label.col-sm-2.control-label(for="inputTitle") 电影名字
           .col-sm-10
             input#inputTitle.form-control(type="text",name="title",value="#{movie.title}")
@@ -39,6 +44,10 @@ block content
                 each cat in catetories
                   option #{cat.name}
               option  其他
+        .form-group(style="display:none;")
+          label.col-sm-2.control-label(for="otherCatetory") 其他类型
+          .col-sm-10
+            input#otherCatetory.form-control(type="text",name="otherCatetory",placeholder="请输入自定义电影类型")
         .form-group
           label.col-sm-2.control-label(for="inputPoster") 海报地址
           .col-sm-10
@@ -58,3 +67,5 @@ block content
         .form-group
           .col-sm-offset-2.col-sm-10
           button.btn.btn-default(type="submit") 录入
+
+  script(src="/javascripts/admin.js",type="text/javascript")

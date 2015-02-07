@@ -6,11 +6,11 @@ block content
       .page-header
         h1= title
       each cat in catetories
-        .panel.panel-default
-          .panel-heading
-            h3 #{cat.name}
-          .panel-body
-            if cat.movies && cat.movies.length >0
+        if cat.movies && cat.movies.length >0
+          .panel.panel-default
+            .panel-heading
+              h3 #{cat.name}
+            .panel-body
               each item in cat.movies
                 .col-md-2
                   .thumbnail

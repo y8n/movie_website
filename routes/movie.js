@@ -73,6 +73,9 @@ router.get('/admin/update/:id',signinRequired,adminRequired,function(req,res){
 // admin post movie
 router.post('/admin/movie/new',signinRequired,adminRequired,function(req,res){
     var movieObj = req.body;
+    if(movieObj.catetory == '其他'){
+        movieObj.catetory = movieObj.otherCatetory;
+    }
     var id = movieObj._id;
     var _movie = {};
 
@@ -95,8 +98,14 @@ router.post('/admin/movie/new',signinRequired,adminRequired,function(req,res){
                     return;
                 }
                 Catetory.save(movie,function(err,catetory){
-                    console.log("Update success");
-                    res.redirect("/movie/"+id);
+                    Catetory.saveCatetory(movieObj.catetory,function(err,catetory){
+                        if(err){
+                            return console.error(err);
+                        }
+                        console.log('new catetory:'+movie.catetory);
+                        console.log("Update success");
+                        res.redirect("/movie/"+id);
+                    })
                 })
             })
         });
@@ -119,8 +128,13 @@ router.post('/admin/movie/new',signinRequired,adminRequired,function(req,res){
                 return;
             }
             Catetory.save(movie,function(err,catetory){
-                console.log("Insert success.New data's id is "+movie._id);
-                res.redirect('/movie/'+movie._id);
+                Catetory.saveCatetory(movieObj.catetory,function(err,catetory){
+                    if(err){
+                        return console.error(err);
+                    }
+                    console.log("Insert success.New data's id is "+movie._id);
+                    res.redirect('/movie/'+movie._id);
+                })
             })
         });    
     }

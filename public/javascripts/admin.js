@@ -22,22 +22,56 @@ $(function() {
 			}
 		}
 	});
-	$('#signinForm :button').eq(1).click(function(e){
-		$.ajax({
-			type:"post",
-			url:'/user/signin',
-			data:$('#signinForm').serialize(),
-			success:function(data){
-				if(data.success){
-					$('#signinForm .alert').show().addClass('alert-success');
-					$('#signinForm .alert .content').text(data.msg);
-				}else{
-					$('#signinForm .alert .content').text(data.msg);
-					$('#signinForm .alert').show().addClass('alert-danger').fadeOut(3000).remove();
+	$('#getDouban').click(function(){
+		var douban = $('#douban');
+		var id = douban.val();
+		if(id){
+			$.ajax({
+				url:'https://api.douban.com/v2/movie/subject/'+id,
+				cache:true,
+				type:'get',
+				dataType:'jsonp',
+				crossDomain:true,
+				jsonp:'callback',
+				success:function(data){
+					$('#inputTitle').val(data.title);
+					$('#inputDoctor').val(data.directors[0].name);
+					$('#inputCountry').val(data.countries[0].name);
+					$('#selectCatetory').val(data.genres[0]);
+					$('#inputPoster').val(data.images.large);
+					$('#inputYear').val(data.year);
+					$('#inputSummary').val(data.summary);
 				}
-			}
-		})
-	});
+			});
+		}else{
+			alert('豆瓣电影ID不能为空')
+		}
+	})
+	$('#selectCatetory').change(function(){
+		if($('#selectCatetory').val() == '其他'){
+			$('.form-group[style]').show();
+		}else{
+			$('.form-group[style]').hide();
+		}
+	})
+	
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
