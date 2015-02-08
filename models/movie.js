@@ -147,6 +147,29 @@ Movie.deleteById = function deleteById(id,callback){
 		});
 	});
 }
+// 搜索电影
+Movie.search = function search(name,callback){
+	DB.open(function(err,db){
+		if(err){
+			return callback(err);
+		}
+		db.collection('movies',function(err,collection){
+			if(err){
+				DB.close();
+				return callback(err);
+			}
+			var reg = new RegExp(name,'i');
+			collection.find({title:reg}).toArray(function(err,movies){
+				DB.close();
+				if(movies){
+					callback(err,movies);
+				}else{
+					callback(err,null);
+				}
+			});
+		});
+	});
+}
 
 
 

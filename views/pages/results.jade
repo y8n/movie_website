@@ -1,0 +1,32 @@
+extends ../layout
+
+block content
+  .container
+    .row
+      .panel.panel-default
+        .panel-heading
+          h3 
+            span.text-info #{keyword}
+            - if(search){
+                的搜索结果
+            - }
+        .panel-body
+          if movies && movies.length >0
+            each movie in movies
+              .col-md-2
+                .thumbnail
+                  a(href="/movie/#{movie._id}")
+                    img(src="/images/poster.png",alt="#{movie.title}")
+                  .caption
+                    h3= movie.title
+                    p: a.btn.btn-primary(href="/movie/#{movie._id}",role="button") 观看预告片 
+      ul.pagination.pull-right
+        - for (var i =1;i<=totalPage;i++){
+        -   if(currentPage == i){
+              li.active
+                span= currentPage
+        -   }else{
+              li
+                a(href="/results?#{query}&p=#{i}") #{i}
+        -   }
+        - }

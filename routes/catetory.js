@@ -1,12 +1,13 @@
 var express = require('express');
 var Catetory = require('../models/catetory');
 var router = express.Router();
-
+// 添加新的电影类型页面
 router.get('/admin/catetory',adminRequired,function(req,res){
 	res.render('catetory',{
 		title:'新的添加电影类型'
 	});
 });
+// 添加新的电影类型
 router.post('/admin/catetory/new',adminRequired,function(req,res){
 	var catetory = req.body.catetory;
 	Catetory.saveCatetory(catetory,function(err,catetory){
@@ -17,6 +18,7 @@ router.post('/admin/catetory/new',adminRequired,function(req,res){
 	})
 
 })
+// 显示所有电影类型的列表
 router.get('/admin/catetory/list',adminRequired,function(req,res){
 	Catetory.findAllCatetory(function(err,catetories){
 		res.render('catetorylist',{
@@ -25,6 +27,8 @@ router.get('/admin/catetory/list',adminRequired,function(req,res){
 		});
 	})
 })
+
+// 需要管理员登录
 function adminRequired(req,res,next){
     var user = req.session.user;
     if(user && user.role && user.role > 10){

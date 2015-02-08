@@ -1,4 +1,15 @@
-
+.container
+  .row
+    .page-header.clearfix
+      h1= title
+      .col-md-4
+        small 寒假项目
+      .col-md-8
+        form(method="get",action="/results")
+          .input-group.col-sm-4.pull-right
+            input.form-control(type="text",name="q")
+            span.input-group-btn
+              button.btn.btn-primary(type="submit") 搜索
 .navbar.navbar-inverse.navbar-fixed-bottom
   .container
     .row

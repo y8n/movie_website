@@ -2,6 +2,8 @@ var express = require('express');
 var Movie = require('../models/movie');
 var Comment = require('../models/comment');
 var Catetory = require('../models/catetory');
+var fs = require('fs');
+var path = require('path');
 var router = express.Router();
 
 
@@ -70,11 +72,15 @@ router.get('/admin/update/:id',signinRequired,adminRequired,function(req,res){
     }
 });
 
-// admin post movie
+// 管理员上传电影信息，在增加了海报自定义以后，需要添加一个中间件来控制海报上传结束之后再更新或存储电影
 router.post('/admin/movie/new',signinRequired,adminRequired,function(req,res){
     var movieObj = req.body;
-    if(movieObj.catetory == '其他'){
+    console.log(movieObj)
+    if(movieObj.catetory == '其他'){ //判读是否是用户自定义的电影类型
         movieObj.catetory = movieObj.otherCatetory;
+    }
+    if(req.poster){ //判断是否是自定义上传的电影海报
+        movieObj.poster = req.poster;
     }
     var id = movieObj._id;
     var _movie = {};
@@ -189,9 +195,48 @@ function adminRequired(req,res,next){
     }
     next();
 }
+// 确保上传电影海报完毕
+function savePoster(req,res,next){
+    var upload = req.body;
+    console.log(upload);
+    /*
+    var posterDate = req.files.uploadPoster;
+    var filePath = posterDate.path;
+    var originalFilename = posterDate.originalFilename;
 
+    if(originalFilename){
+        fs.readFile(filePath,function(err,data){
+            var timestamp = Data.now();
+            var type = posterDate.type.split('/')[1];
+            var poster = timestamp+'.'+type;
+            var newPath = path.join(__dirname,'../../','/public/upload/'+poster);
+            fs.writeFile(newPath,data,function(err){
+                req.poster = poster;
+                next();
+            })
+        })
+    }else{
+        next();
+    }
+    */
+}
 
 module.exports = router;
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

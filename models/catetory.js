@@ -43,7 +43,7 @@ Catetory.save = function(movie,callback){
 		});
 	});
 }
-Catetory.findAllByCatetory = function findAllByCatetory(catetory,callback){
+Catetory.findById = function findById(id,callback){
 	DB.open(function(err,db){
 		if(err){
 			return callback(err);
@@ -53,7 +53,7 @@ Catetory.findAllByCatetory = function findAllByCatetory(catetory,callback){
 				DB.close();
 				return callback(err);
 			}
-			collection.findOne({name:catetory},function(err,catetory){
+			collection.findOne({_id:mongodb.ObjectID(id)},function(err,catetory){
 				DB.close();
 				callback(err,catetory);
 			})
