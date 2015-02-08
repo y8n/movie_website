@@ -2,7 +2,7 @@ var express = require('express');
 var User = require('../models/user');
 var router = express.Router();
 
-/* GET users listing. */
+// 获取所有用户列表
 router.get('/user/list',signinRequired,adminRequired,function(req,res){
 	User.findAll(function(err,doc){
     	if(err){

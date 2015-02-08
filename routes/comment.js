@@ -2,6 +2,7 @@ var express = require('express');
 var Comment = require('../models/comment');
 var router = express.Router();
 
+// 获取新的评论
 router.post('/admin/comment',signinRequired,function(req,res){
 	var _comment = req.body;
 	var movieId = _comment.movieId;
@@ -40,7 +41,7 @@ router.post('/admin/comment',signinRequired,function(req,res){
 		});
 	}
 })
-
+// 需要用户登录
 function signinRequired(req,res,next){
 	var user = req.session.user;
 	if(!user){

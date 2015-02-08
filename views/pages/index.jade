@@ -3,7 +3,7 @@ extends ../layout
 block content
   .container
     .row
-      each cat in catetories
+      each cat in categories
         if cat.movies && cat.movies.length >0
           .panel.panel-default
             .panel-heading
@@ -19,5 +19,5 @@ block content
                       else
                         img(src="/upload/#{item.poster}",alt="#{item.title}")
                     .caption
-                      h3= item.title
+                      h4= item.title
                       p: a.btn.btn-primary(href="/movie/#{item._id}",role="button") 观看预告片 

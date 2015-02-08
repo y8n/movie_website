@@ -21,7 +21,8 @@ User.prototype.insert = function insert(callback){
 	var _user = {
 		username:this.username,
 		avatar:this.avatar,
-		password:password
+		password:password,
+		role:this.role
 	}	
 
 	DB.open(function(err,db){
@@ -83,7 +84,8 @@ User.prototype.comparePassword = function comparePassword(callback){
 	var _user = {
 		username:this.username,
 		avatar:this.avatar,
-		password:password
+		password:password,
+		role:this.role
 	}
 	User.findByName(_user.username,function(err,user){
 		if(err){

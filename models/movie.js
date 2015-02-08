@@ -1,5 +1,4 @@
 var DB = require('./db'),
-	Catetory = require('./catetory'),
 	mongodb = require('mongodb');
 function Movie (movie) {
 	this.title = movie.title;
@@ -10,7 +9,7 @@ function Movie (movie) {
     this.flash = movie.flash;
     this.summary = movie.summary;
     this.language = movie.language;
-    this.catetory = movie.catetory;
+    this.category = movie.category;
 }
 
 module.exports = Movie;
@@ -27,7 +26,7 @@ Movie.prototype.insert = function insert(callback){
 	    flash : this.flash,
 	    summary : this.summary,
 	    language : this.language,
-	    catetory : this.catetory
+	    category : this.category
 	}
 
 	DB.open(function(err,db){
@@ -69,7 +68,7 @@ Movie.findById = function findById(id,callback){
 		});
 	});
 }
-// 获取所有数据
+// 获取所有电影数据
 Movie.findAll = function findAll(callback){
 	DB.open(function(err,db){
 		if(err){
@@ -91,7 +90,7 @@ Movie.findAll = function findAll(callback){
 		});
 	});
 }
-// 根据id更新数据
+// 根据电影ID更新数据
 Movie.prototype.update = function update(id,callback){
 	var _movie = {
 		title : this.title,
@@ -102,7 +101,7 @@ Movie.prototype.update = function update(id,callback){
 	    flash : this.flash,
 	    summary : this.summary,
 	    language : this.language,
-	    catetory : this.catetory
+	    category : this.category
 	}
 	DB.open(function(err,db){
 		if(err){
@@ -125,7 +124,7 @@ Movie.prototype.update = function update(id,callback){
 		});
 	});
 }
-// 根据id删除数据
+// 根据电影id删除数据
 Movie.deleteById = function deleteById(id,callback){
 	DB.open(function(err,db){
 		if(err){
@@ -147,7 +146,7 @@ Movie.deleteById = function deleteById(id,callback){
 		});
 	});
 }
-// 搜索电影
+// 搜索包含指定名字的电影
 Movie.search = function search(name,callback){
 	DB.open(function(err,db){
 		if(err){

@@ -27,25 +27,25 @@ block content
           .col-sm-10
             input#inputLanguage.form-control(type="text",name="language",value="#{movie.language}")
         .form-group
-          label.col-sm-2.control-label(for="selectCatetory") 类型
+          label.col-sm-2.control-label(for="selectCategory") 类型
           .col-sm-10
-            input.form-control(type="hidden",name="oldCatetory",value="#{movie.catetory}")
-            select#selectCatetory.form-control(name="catetory")
-              if movie.catetory
-                each cat in catetories
-                  if cat.name == movie.catetory
+            input.form-control(type="hidden",name="oldCategory",value="#{movie.category}")
+            select#selectCategory.form-control(name="category")
+              if movie.category
+                each cat in categories
+                  if cat.name == movie.category
                     option(selected="seclected") #{cat.name}
                   else
                     option #{cat.name}
               else
                 option 
-                each cat in catetories
+                each cat in categories
                   option #{cat.name}
               option  其他
         .form-group(style="display:none;")
-          label.col-sm-2.control-label(for="otherCatetory") 其他类型
+          label.col-sm-2.control-label(for="otherCategory") 其他类型
           .col-sm-10
-            input#otherCatetory.form-control(type="text",name="otherCatetory",placeholder="请输入自定义电影类型")
+            input#otherCategory.form-control(type="text",name="otherCategory",placeholder="请输入自定义电影类型")
         .form-group
           label.col-sm-2.control-label(for="inputPoster") 海报地址
           .col-sm-10

@@ -1,43 +1,44 @@
 var express = require('express');
 var Movie = require('../models/movie');
-var Catetory = require('../models/catetory');
+var Category = require('../models/category');
 var DB = require('../models/db');
 var router = express.Router();
 
 // index page
 router.get('/', function(req, res) {
-    Catetory.findAll(function(err,catetories){
+    Category.findAll(function(err,categories){
         if(err){
             console.error(err);
             return;
         }
         res.render('index',{
             title:'首页-Welcome to My Website',
-            catetories:catetories
+            categories:categories
         });
     });
 });
-// 分页显示不同类型的电影
+// 根据GET请求分页显示不同类型的电影
 router.get('/results',function(req,res){
     var catId = req.query.cat;
     var q = req.query.q;
-    var count = 2;
+    var count = 4;
     var page = req.query.p || 1;
     var index = (page-1) * count;
+    // 显示某一类型的电影
     if(catId){
-        Catetory.findById(catId,function(err,catetory){
-            var len = catetory.movies.length;
-            var result = catetory.movies.splice(index,count);
+        Category.findById(catId,function(err,category){
+            var len = category.movies.length;
+            var result = category.movies.splice(index,count);
             res.render('results',{
                 title:'分类显示电影列表',
-                keyword:catetory.name,
-                query:'cat='+catetory._id,
+                keyword:category.name,
+                query:'cat='+category._id,
                 currentPage:page,
                 totalPage:Math.ceil(len/count),
                 movies:result
             })
         })
-    }else if(q){
+    }else if(q){ // 显示用户搜索结果
         Movie.search(q,function(err,movies){
             if(err){
                 return console.error(err);
@@ -54,9 +55,7 @@ router.get('/results',function(req,res){
                 movies:result
             })
         })  
-
-
-    }else{
+    }else{ //请求不符合条件
         var temp = '';
         for(var i in req.query){
             temp  = temp + i +',';

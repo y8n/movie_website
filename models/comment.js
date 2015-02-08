@@ -10,7 +10,7 @@ function Comment(comment){
 }
 
 module.exports = Comment;
-
+// 将评论存入数据库
 Comment.prototype.save = function save (callback){
 	//存入mongodb中到文档
 	var _comment = {
@@ -36,7 +36,7 @@ Comment.prototype.save = function save (callback){
 		});
 	});
 }
-
+// 通过电影的ID获取所有评论以及评论中所有回复
 Comment.findAllByMoiveId = function findAllByMoiveId(id,callback){
 	DB.open(function(err,db){
 		if(err){
@@ -96,6 +96,7 @@ Comment.findAllByMoiveId = function findAllByMoiveId(id,callback){
 		});
 	});
 }
+// 获取指定ID的评论
 Comment.findById = function findById(id,callback){
 	DB.open(function(err,db){
 		if(err){
@@ -113,6 +114,7 @@ Comment.findById = function findById(id,callback){
 		});
 	});
 }
+// 向指定ID的评论中添加指定的回复内容
 Comment.addReply = function addReply(id,reply,callback){
 	DB.open(function(err,db){
 		if(err){

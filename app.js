@@ -14,9 +14,9 @@ var index = require('./routes/index');
 var movie = require('./routes/movie');
 var user = require('./routes/user');
 var comment = require('./routes/comment');
-var catetory = require('./routes/catetory');
+var category = require('./routes/category');
 
-var routes = [index,movie,user,comment,catetory];
+var routes = [index,movie,user,comment,category];
 
 var port = process.env.PORT || 3000;
 var app = express();

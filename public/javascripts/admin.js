@@ -37,7 +37,7 @@ $(function() {
 					$('#inputTitle').val(data.title);
 					$('#inputDoctor').val(data.directors[0].name);
 					$('#inputCountry').val(data.countries[0].name);
-					$('#selectCatetory').val(data.genres[0]);
+					$('#selectCategory').val(data.genres[0]);
 					$('#inputPoster').val(data.images.large);
 					$('#inputYear').val(data.year);
 					$('#inputSummary').val(data.summary);
@@ -47,8 +47,8 @@ $(function() {
 			alert('豆瓣电影ID不能为空')
 		}
 	})
-	$('#selectCatetory').change(function(){
-		if($('#selectCatetory').val() == '其他'){
+	$('#selectCategory').change(function(){
+		if($('#selectCategory').val() == '其他'){
 			$('.form-group[style]').show();
 		}else{
 			$('.form-group[style]').hide();
