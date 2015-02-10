@@ -1,8 +1,44 @@
 body {
-  padding: 50px;
   font: 14px "Lucida Grande", Helvetica, Arial, sans-serif;
 }
+/* 观看预告片布局 */ 
+.see-movie{
+	position: absolute;
+	width: 100px;
+	height: 35px;
+	left: 45px;
+	bottom: 20px;
+}
+.caption{
+	text-align: center;
+}
+/* 分页显示器 */
+.panel-heading{
+	position: relative;
+}
+.result-pagination{
+	position: absolute;
+	right: 20px;
+	top: 0;
+}
+/*定位锚点及链接*/
+.categories{
+	text-align: center;
+	position: fixed;
+	bottom: 20px;
+	right: 0;
+}
+/*电影细节页面*/
 
-a {
-  color: #00B7FF;
+/*简介省略显示*/
+.summary{
+	display: inline-block;
+	max-height: 300px;
+	overflow-y: hidden;
+}
+/*表单未完成提示*/
+.form-warning{
+	color:red;
+	vertical-align: middle;
+	display: none;
 }

@@ -4,30 +4,44 @@ var router = express.Router();
 
 // 获取所有用户列表
 router.get('/user/list',signinRequired,adminRequired,function(req,res){
-	User.findAll(function(err,doc){
+	var page = req.query.p  || 1;
+    var count = 6;
+    var index = (page-1) * count;
+	User.findAll(function(err,users){
     	if(err){
     		console.error(err);
     		return;
     	}
+    	var len = users.length;
+        var results = users.splice(index,count);
     	res.render('userlist',{
             title:'用户列表',
-            users:doc
+            users:results,
+            currentPage:page,
+            totalPage:Math.ceil(len/count)
         });
     })
 });
 // 用户注册
 router.post('/user/signup', function(req, res) {
 	var _user = new User(req.body);
-	_user.insert(function(err,doc){
+	_user.insert(function(err,user){
 		if(err){
 			console.log(err);
 			return;
-		}else if(doc.message){
-			console.log(doc.message); //用户已经存在
-			res.redirect('/signin');	
+		}else if(user.message){//用户已经存在
+			res.send({
+				success:false,
+				msg:'用户已经存在，请登录！'
+			});	
 		}else{
 			console.log('Insert success');
-			res.redirect('/user/list');
+			req.session.user= user; //直接登录
+			res.send({
+				success:true,
+				msg:'注册成功！',
+				pathname:req.session.preUrl[1]
+			});
 		}
 	});
 
@@ -44,7 +58,7 @@ router.post('/user/signin',function(req,res){
 		if(isMatch){
 			console.log('Signin success');
 			req.session.user= user;
-			res.redirect('/user/list');
+			res.redirect(req.session.preUrl[1]);
 		}else{
 			console.log('failed')
 			//res.json({success:false,msg:"用户名或密码错误"})
@@ -55,7 +69,7 @@ router.post('/user/signin',function(req,res){
 // 用户登出
 router.get('/logout',function(req,res){
 	delete req.session.user;
-	res.redirect('/');
+	res.redirect(req.session.preUrl[1]);
 });
 
 // 用户登录成功现实页面

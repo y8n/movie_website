@@ -3,33 +3,37 @@ extends ../layout
 block content
   .container
     .row
-      form.form-horizontal(method="post",action="/admin/movie/new")
+      form#new_movie_form.form-horizontal(method="post",action="/admin/movie/new")
         input(type="hidden",name="_id",value="#{movie._id}")
         .form-group
           label.col-sm-2.control-label(for="douban") 豆瓣同步
-          .col-sm-3
+          .col-sm-4
             input#douban.form-control(type="text",name="douban",placeholder="请输入豆瓣电影ID")
           button#getDouban.btn.btn-primary(type="button") 同步数据
         .form-group
           label.col-sm-2.control-label(for="inputTitle") 电影名字
-          .col-sm-10
+          .col-sm-4
             input#inputTitle.form-control(type="text",name="title",value="#{movie.title}")
+          span.form-warning.glyphicon.glyphicon-warning-sign
         .form-group
           label.col-sm-2.control-label(for="inputDoctor") 电影导演
-          .col-sm-10
+          .col-sm-4
             input#inputDoctor.form-control(type="text",name="doctor",value="#{movie.doctor}")
+          span.form-warning.glyphicon.glyphicon-warning-sign
         .form-group
           label.col-sm-2.control-label(for="inputCountry") 国家
-          .col-sm-10
+          .col-sm-4
             input#inputCountry.form-control(type="text",name="country",value="#{movie.country}")
+          span.form-warning.glyphicon.glyphicon-warning-sign
         .form-group
           label.col-sm-2.control-label(for="inputLanguage") 语种
-          .col-sm-10
+          .col-sm-4
             input#inputLanguage.form-control(type="text",name="language",value="#{movie.language}")
+          span.form-warning.glyphicon.glyphicon-warning-sign
         .form-group
           label.col-sm-2.control-label(for="selectCategory") 类型
-          .col-sm-10
-            input.form-control(type="hidden",name="oldCategory",value="#{movie.category}")
+          .col-sm-4
+            input#oldCategory.form-control(type="hidden",name="oldCategory",value="#{movie.category}")
             select#selectCategory.form-control(name="category")
               if movie.category
                 each cat in categories
@@ -42,32 +46,38 @@ block content
                 each cat in categories
                   option #{cat.name}
               option  其他
-        .form-group(style="display:none;")
+          span.form-warning.glyphicon.glyphicon-warning-sign
+        .form-group.otherCategory(style="display:none;")
           label.col-sm-2.control-label(for="otherCategory") 其他类型
-          .col-sm-10
+          .col-sm-4
             input#otherCategory.form-control(type="text",name="otherCategory",placeholder="请输入自定义电影类型")
+          span.form-warning.glyphicon.glyphicon-warning-sign
         .form-group
           label.col-sm-2.control-label(for="inputPoster") 海报地址
-          .col-sm-10
+          .col-sm-4
             input#inputPoster.form-control(type="text",name="poster",value="#{movie.poster}")
-        .form-group
-          label.col-sm-2.control-label(for="uploadPoster") 海报上传
-          .col-sm-10
-            input#uploadPoster.form-control(type="file",name="uploadPoster")
+          span.form-warning.glyphicon.glyphicon-warning-sign
+        //- .form-group
+        //-   label.col-sm-2.control-label(for="uploadPoster") 海报上传
+        //-   .col-sm-4
+        //-     input#uploadPoster.form-control(type="file",name="uploadPoster")
+        //-   span.form-warning.glyphicon.glyphicon-warning-sign
         .form-group
           label.col-sm-2.control-label(for="inputFlash") 片源地址
-          .col-sm-10
+          .col-sm-4
             input#inputFlash.form-control(type="text",name="flash",value="#{movie.flash}") 
+          span.form-warning.glyphicon.glyphicon-warning-sign
         .form-group
           label.col-sm-2.control-label(for="inputYear") 上映年代
-          .col-sm-10
+          .col-sm-4
             input#inputYear.form-control(type="text",name="year",value="#{movie.year}")
+          span.form-warning.glyphicon.glyphicon-warning-sign
         .form-group
           label.col-sm-2.control-label(for="inputSummary") 电影简介
-          .col-sm-10
+          .col-sm-4
             textarea#inputSummary.form-control(type="text",name="summary") #{movie.summary}
+          span.form-warning.glyphicon.glyphicon-warning-sign
         .form-group
-          .col-sm-offset-2.col-sm-10
-          button.btn.btn-default(type="submit") 录入
-
+          .col-sm-4.col-md-offset-5
+            button#add-movie.btn.btn-success.btn-lg(type="button") 录入
   script(src="/javascripts/admin.js",type="text/javascript")

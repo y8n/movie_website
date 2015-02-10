@@ -21,7 +21,7 @@ router.get('/', function(req, res) {
 router.get('/results',function(req,res){
     var catId = req.query.cat;
     var q = req.query.q;
-    var count = 4;
+    var count = 6;
     var page = req.query.p || 1;
     var index = (page-1) * count;
     // 显示某一类型的电影
@@ -38,7 +38,7 @@ router.get('/results',function(req,res){
                 movies:result
             })
         })
-    }else if(q){ // 显示用户搜索结果
+    }else if(q && q != ''){ // 显示用户搜索结果
         Movie.search(q,function(err,movies){
             if(err){
                 return console.error(err);

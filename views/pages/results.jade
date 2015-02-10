@@ -10,23 +10,27 @@ block content
             - if(search){
                 的搜索结果
             - }
+          ul.pagination.panel-pagination.pull-right.result-pagination
+            - for (var i =1;i<=totalPage;i++){
+            -   if(currentPage == i){
+                  li.active
+                    span= currentPage
+            -   }else if(Math.abs(currentPage-i) < 2){
+                  li
+                    a(href="/results?#{query}&p=#{i}") #{i}
+            -   }else if(Math.abs(currentPage-i) == 2){
+                  li
+                    span ...
+            -   }
+            - }
         .panel-body
           if movies && movies.length >0
             each movie in movies
-              .col-md-2
-                .thumbnail
+              .col-md-2(style="margin-top:10px")
+                .thumbnail(style="height:360px;width:160px")
                   a(href="/movie/#{movie._id}")
-                    img(src="/images/poster.png",alt="#{movie.title}")
+                    img(src="/images/poster.png",alt="#{movie.title}",style="height:230px;width:150px")
                   .caption
                     h4= movie.title
-                    p: a.btn.btn-primary(href="/movie/#{movie._id}",role="button") 观看预告片 
-      ul.pagination.pull-right
-        - for (var i =1;i<=totalPage;i++){
-        -   if(currentPage == i){
-              li.active
-                span= currentPage
-        -   }else{
-              li
-                a(href="/results?#{query}&p=#{i}") #{i}
-        -   }
-        - }
+                    .see-movie
+                      a.btn.btn-primary(href="/movie/#{movie._id}",role="button") 观看预告片 

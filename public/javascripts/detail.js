@@ -1,4 +1,5 @@
 $(function(){
+	// 评论
 	$('.comment').click(function(e){
 		var target = $(this);
 		var toId = target.data('tid');

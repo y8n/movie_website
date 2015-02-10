@@ -3,20 +3,39 @@ extends ../layout
 block content
   .container
     .row
-      table.table.table-hover.table-bordered
-        thead
-          tr
-            th 名字
-            //- th 录入时间
-            th 查看
-            th 更新
-            th 删除
-        tbody
-          each item in users
-            tr(class="item-id-#{item._id}")
-              td #{item.username}
-              //- td #{moment(item.meta.createdAt).format('MM/DD/YYYY')}
-              td: a(target="_blank",href="javascript:void(0)") 查看
-              td: a(target="_blank",href="../user/update/#{item._id}") 修改
-              td
-                button.btn.btn-danger.del(type="button",data-id="#{item._id}") 删除
+      div(style="height:345px")
+        table.table.table-hover.table-bordered
+          thead
+            tr
+              th.col-sm-2 名字
+              th.col-sm-2 用户权限
+              th.col-sm-2 查看
+              th.col-sm-2 更新
+              th.col-sm-2 删除
+          tbody
+            each item in users
+              tr(class="item-id-#{item._id}")
+                td #{item.username}
+                if item.role < 10
+                  td 普通用户
+                else if item.role < 50
+                  td.text-danger 管理员
+                else 
+                  td 超级管理员
+                td: a(target="_blank",href="javascript:void(0)") 查看
+                td: a(target="_blank",href="../user/update/#{item._id}") 修改
+                td
+                  button.btn.btn-danger.del(type="button",data-id="#{item._id}") 删除
+      ul.pagination.panel-pagination.pull-right
+        - for (var i =1;i<=totalPage;i++){
+        -   if(currentPage == i){
+              li.active
+                span= currentPage
+        -   }else if(Math.abs(currentPage-i) == 3){
+              li
+                span ...
+        -   }else if(Math.abs(currentPage-i) < 3){
+              li
+                a(href="/user/list?p=#{i}") #{i}  
+        -   }
+        - }

@@ -16,25 +16,31 @@ router.get('/movie/:id',function(req,res){
         		console.error(err);
         		return;
         	}
-            Comment.findAllByMoiveId(id,function(err,comments){
-                //console.log('comments')
-                //console.log(comments)
-                res.render('detail',{
-                    title:'电影详细信息',
-                    movie:movie,
-                    comments:comments
+            if(movie){
+                Comment.findAllByMoiveId(id,function(err,comments){
+                    //console.log('comments')
+                    //console.log(comments)
+                    res.render('detail',{
+                        title:'电影详细信息',
+                        movie:movie,
+                        comments:comments
+                    })
                 })
-            })
+            }else{
+                res.render('detail',{
+                    title:'电影详细信息'
+                })
+            }
         });
 
     }
 });
 
-// 管理员添加新的电影
-router.get('/admin/movie',signinRequired,adminRequired,function(req,res){
+// 用户添加新的电影
+router.get('/admin/movie',signinRequired,function(req,res){
     Category.findAllCategory(function(err,categories){
         res.render('admin',{
-            title:'后台录入页面',
+            title:'电影录入页面',
             movie:{
                 title:'',
                 doctor:'',
@@ -73,7 +79,7 @@ router.get('/admin/update/:id',signinRequired,adminRequired,function(req,res){
 });
 
 // 管理员上传电影信息，在增加了海报自定义以后，需要添加一个中间件来控制海报上传结束之后再更新或存储电影
-router.post('/admin/movie/new',signinRequired,adminRequired,function(req,res){
+router.post('/admin/movie/new',signinRequired,function(req,res){
     var movieObj = req.body;
     if(movieObj.category == '其他'){ //判读是否是用户自定义的电影类型
         movieObj.category = movieObj.otherCategory;
@@ -109,7 +115,11 @@ router.post('/admin/movie/new',signinRequired,adminRequired,function(req,res){
                         }
                         console.log('new category:'+movie.category);
                         console.log("Update success");
-                        res.redirect("/movie/"+id);
+                        //res.redirect("/movie/"+id);
+                        res.send({
+                            success:true,
+                            pathname:'/movie/'+id
+                        })
                     })
                 })
             })
@@ -138,7 +148,12 @@ router.post('/admin/movie/new',signinRequired,adminRequired,function(req,res){
                         return console.error(err);
                     }
                     console.log("Insert success.New data's id is "+movie._id);
-                    res.redirect('/movie/'+movie._id);
+                    //res.redirect('/movie/'+movie._id);
+                    res.send({
+                        success:true,
+                        pathname:'/movie/'+movie._id
+                    });
+                    return;
                 })
             })
         });    
@@ -146,31 +161,40 @@ router.post('/admin/movie/new',signinRequired,adminRequired,function(req,res){
 });
 
 // 电影列表
-router.get('/admin/list',signinRequired,adminRequired,function(req,res){
-    Movie.findAll(function(err,doc){
+router.get('/admin/movie/list',signinRequired,adminRequired,function(req,res){
+    var page = req.query.p  || 1;
+    var count = 6;
+    var index = (page-1) * count;
+    Movie.findAll(function(err,movies){
         if(err){
             console.error(err);
             return;
         }
+        var len = movies.length;
+        var results = movies.splice(index,count);
         res.render('list',{
             title:'Movie List',
-            movies:doc
+            movies:results,
+            currentPage:page,
+            totalPage:Math.ceil(len/count)
         });
     })
 });
 
 // 删除电影信息
-router.post('/admin/list',signinRequired,adminRequired,function(req,res){
+router.post('/admin/movie/list',signinRequired,adminRequired,function(req,res){
     var id = req.query.id;
     if(id){
-        Movie.deleteById(id,function(err,doc){
+        Movie.deleteById(id,function(err,movie){
             if(err){
                 console.error(err);
                 return;
             }
-            if(doc){
+            if(movie){
                 console.log("Remove success");
-                res.send({success:true,msg:"删除成功"})
+                Category.removeMovie(movie.category,movie._id,function(err,result){//从类型中删除
+                    res.send({success:true,msg:"删除成功"})
+                })
             }else{
                 console.log("No matched data");
                 res.send({success:false,msg:"删除失败:电影不存在"})
@@ -196,13 +220,11 @@ function adminRequired(req,res,next){
 }
 // 确保上传电影海报完毕
 function savePoster(req,res,next){
-    var upload = req.body;
-    console.log(upload);
-    /*
     var posterDate = req.files.uploadPoster;
     var filePath = posterDate.path;
     var originalFilename = posterDate.originalFilename;
-
+    console.log(req.files)
+    /*
     if(originalFilename){
         fs.readFile(filePath,function(err,data){
             var timestamp = Data.now();
@@ -211,13 +233,13 @@ function savePoster(req,res,next){
             var newPath = path.join(__dirname,'../../','/public/upload/'+poster);
             fs.writeFile(newPath,data,function(err){
                 req.poster = poster;
+                
                 next();
             })
         })
     }else{
         next();
-    }
-    */
+    }*/
 }
 
 module.exports = router;

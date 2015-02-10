@@ -4,6 +4,7 @@ block content
   .container
     .row
       each cat in categories
+        div(id="#{cat.name}")
         if cat.movies && cat.movies.length >0
           .panel.panel-default
             .panel-heading
@@ -11,13 +12,34 @@ block content
                 a(href="/results?cat=#{cat._id}&p=1") #{cat.name}
             .panel-body
               each item in cat.movies
-                .col-md-2
-                  .thumbnail
+                .col-sm-2(style="margin-top:10px")
+                  .thumbnail(style="height:360px;width:160px")
                     a(href="/movie/#{item._id}")
                       if item.poster.indexOf('http:') >-1
-                        img(src="#{item.poster}",alt="#{item.title}")
+                        img(src="#{item.poster}",alt="#{item.title}",style="height:230px;width:150px")
                       else
-                        img(src="/upload/#{item.poster}",alt="#{item.title}")
+                        img(src="/upload/#{item.poster}",alt="#{item.title}",style="height:230px;width:150px")
                     .caption
                       h4= item.title
-                      p: a.btn.btn-primary(href="/movie/#{item._id}",role="button") 观看预告片 
+                      .see-movie
+                        a.btn.btn-primary(href="/movie/#{item._id}",role="button") 观看预告片 
+
+
+    .categories
+      ul.list-froup
+        li.list-group-item
+          a(href="#top") TOP
+        li.list-group-item
+          a(href="#科幻片") 科幻片
+        li.list-group-item
+          a(href="#喜剧片") 喜剧片
+        li.list-group-item
+          a(href="#魔幻片") 魔幻片
+        li.list-group-item
+          a(href="#动画片") 动画片
+        li.list-group-item
+          a(href="#动作片") 动作片
+        li.list-group-item
+          a(href="#爱情片") 爱情片
+        li.list-group-item
+          a(href="#古装片") 古装片

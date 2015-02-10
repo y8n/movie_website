@@ -135,12 +135,16 @@ Movie.deleteById = function deleteById(id,callback){
 				DB.close();
 				return callback(err);
 			}
-			collection.remove({_id:mongodb.ObjectID(id)},function(err,doc){
-				DB.close();
-				if(doc){
-					callback(err,doc);
-				}else{
-					callback(err,null);
+			collection.findOne({_id:mongodb.ObjectID(id)},function(err,movie){
+				if(movie){
+					collection.remove(movie,function(err,doc){
+						DB.close();
+						if(doc){
+							callback(err,movie);
+						}else{
+							callback(err,null);
+						}
+					});
 				}
 			});
 		});

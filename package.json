@@ -16,6 +16,7 @@
     "jade": "~1.8.2",
     "mongodb":"~1.4.20",
     "express-session":"~1.10.2",
-    "connect-mongo":"~0.4.1"
+    "connect-mongo":"~0.4.1",
+    "connect-multiparty":"~1.2.5"
   }
 }
