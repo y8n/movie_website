@@ -5,7 +5,8 @@
   "scripts": {
     "start": "node ./bin/www"
   },
-  "description":"添加用户登陆和注册管理，用户展示列表/user/list,添加session管理",
+  "description":"2014年底寒假编写node练习项目。",
+  "homepage":"http://yangjiyuan.github.io/movie_website/",
   "dependencies": {
     "express": "~4.10.6",
     "body-parser": "~1.10.1",
