@@ -7,9 +7,8 @@ block content
         .panel-heading
           h3 
             span.text-info #{keyword}
-            - if(search){
-                的搜索结果
-            - }
+            if search
+              span 的搜索结果
           ul.pagination.panel-pagination.pull-right.result-pagination
             - for (var i =1;i<=totalPage;i++){
             -   if(currentPage == i){

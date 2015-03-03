@@ -8,7 +8,6 @@ function Comment(comment){
 	this.reply = [];
 	this.content = comment.content;
 }
-
 module.exports = Comment;
 // 将评论存入数据库
 Comment.prototype.save = function save (callback){
